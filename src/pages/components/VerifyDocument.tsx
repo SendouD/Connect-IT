@@ -16,6 +16,7 @@ const VerifyDocument = () => {
   const[ImgHash,setImghash]=useState("");
   const [vs, setVs] = useState<boolean | null>(null); 
   const { writeContract } = useWriteContract();
+  const [load,setLoad]=useState(false);
 
 
 
@@ -25,6 +26,7 @@ const VerifyDocument = () => {
       try {
         const formData = new FormData();
         formData.append("file", file);
+        setLoad(true);
 
         const resFile = await axios({
           method: "post",
@@ -36,6 +38,7 @@ const VerifyDocument = () => {
             "Content-Type": "multipart/form-data",
           },
         });
+        setLoad(false);
 
         const ImgHash = resFile.data.IpfsHash;
         const dataAdded=resFile.data.Timestamp;
@@ -43,7 +46,7 @@ const VerifyDocument = () => {
         console.log(ImgHash);
 
        
-        alert("Successfully Image Uploaded");
+        
         setFileName("No image selected");
         setFile(null);
       } catch (e) {
@@ -73,7 +76,7 @@ const VerifyDocument = () => {
       });
 
       if (response.status === 200) {
-        alert('File successfully deleted from Pinata!');
+       console.log("file is not verified")
       } else {
         console.error('Failed to delete file:', response.data);
       }
@@ -118,8 +121,8 @@ const VerifyDocument = () => {
         />
         <span className="textArea">Image: {fileName}</span>
         <br />  
-        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" disabled={!file} onClick={handleSubmit}>
-          Upload  File To Verify 
+        <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" disabled={!file||isLoading} onClick={handleSubmit}>
+        {load ? 'Loading...' : 'Upload the file to verify'}
          </button>
       </form>
       

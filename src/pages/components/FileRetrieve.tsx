@@ -1,25 +1,35 @@
 'use client'
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useAccount } from 'wagmi';
 import { abi } from '../../artifacts/contracts/DocumentVerify.sol/DocumentVerify.json';
 import { useReadContract } from 'wagmi';
 
 const FileRetrieve = () => {
   const [tokenId, setTokenId] = useState("");
   const [imgUrl, setImgUrl] = useState("");
+  const { address } = useAccount();
 
   const { data, isError, error, isLoading } = useReadContract({
     abi,
     address: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
+    account:address,
     functionName: 'getDocument',
     args: [tokenId],
     query: {
       enabled: Boolean(tokenId),
     }
   });
+  useEffect(()=>{
+
+    setTokenId("");
+
+
+  },[imgUrl])
+ 
   
   const handleRetrieve = () => {
-    const imgUrl = `https://gateway.pinata.cloud/ipfs/${data[0]}`;
+    const imgUrl = `https://gateway.pinata.cloud/ipfs/${data}`;
     console.log(imgUrl);
     setImgUrl(imgUrl);   
   };
@@ -52,7 +62,9 @@ const FileRetrieve = () => {
           />
         </div>
       )}
+      <h1>{address}</h1>
     </div>
+    
   );
 };
 

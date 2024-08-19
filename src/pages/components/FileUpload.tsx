@@ -14,13 +14,15 @@ const FileUpload = () => {
   const [fileName, setFileName] = useState("No image selected");
   const { address } = useAccount();
   const { writeContract } = useWriteContract();
+  const [logdetails,setLogdetails]=useState(null);
 
   useWatchContractEvent({
     address: '0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512',
     abi,
     eventName: 'docadded',
     onLogs(logs) {
-      console.log('New logs!', logs)
+      console.log('New logs!', logs[0].args.tokenId);
+      
     },
   })
 
