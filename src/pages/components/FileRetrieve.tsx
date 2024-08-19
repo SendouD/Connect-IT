@@ -62,7 +62,6 @@ const FileRetrieve = () => {
           />
         </div>
       )}
-      <h1>{address}</h1>
     </div>
     
   );
